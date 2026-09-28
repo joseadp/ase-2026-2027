@@ -1,28 +1,51 @@
-stages:
-  - build
-  - test
-  - deploy
+name: Job dependencies
 
-build_app_A:
-  stage: build
-  script: echo "Building A..."
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
-build_app_B:
-  stage: build
-  script: echo "Building B..."
+jobs:
+  build_app_a:
+    name: Build application A
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Building A..."
+          sleep 5
 
-test_app_A:
-  stage: test
-  script: echo "Testing A..."
+  build_app_b:
+    name: Build application B
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Building B..."
+          sleep 20
 
-test_app_B:
-  stage: test
-  script: echo "Testing B..."
+  test_app_a:
+    name: Test application A
+    runs-on: ubuntu-latest
+    needs: [build_app_a, build_app_b]
+    steps:
+      - run: echo "Testing A..."
 
-deploy_app_A:
-  stage: deploy
-  script: echo "Deploying A..."
+  test_app_b:
+    name: Test application B
+    runs-on: ubuntu-latest
+    needs: [build_app_a, build_app_b]
+    steps:
+      - run: echo "Testing B..."
 
-deploy_app_B:
-  stage: deploy
-  script: echo "Deploying B..."
+  deploy_app_a:
+    name: Deploy application A
+    runs-on: ubuntu-latest
+    needs: [test_app_a, test_app_b]
+    steps:
+      - run: echo "Deploying A..."
+
+  deploy_app_b:
+    name: Deploy application B
+    runs-on: ubuntu-latest
+    needs: [test_app_a, test_app_b]
+    steps:
+      - run: echo "Deploying B..."

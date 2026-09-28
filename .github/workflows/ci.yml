@@ -1,0 +1,28 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build_app_A:
+  stage: build
+  script: echo "Building A..."
+
+build_app_B:
+  stage: build
+  script: echo "Building B..."
+
+test_app_A:
+  stage: test
+  script: echo "Testing A..."
+
+test_app_B:
+  stage: test
+  script: echo "Testing B..."
+
+deploy_app_A:
+  stage: deploy
+  script: echo "Deploying A..."
+
+deploy_app_B:
+  stage: deploy
+  script: echo "Deploying B..."
